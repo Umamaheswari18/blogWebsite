@@ -39,8 +39,6 @@ router.route('/add')
 
 
 
-
-
 router.route('/blogs')
       .get(function(req,res)
     {
