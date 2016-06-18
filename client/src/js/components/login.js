@@ -15,15 +15,7 @@ var LoginBox = React.createClass({
    Router.Navigation,
    Reflux.listenTo(store,'onStoreUpdate')],
 
- // getInitialState:function()
- // {
- //   return{
- //   isLoggedIn : false
- // };
- // },
-
-
- onStoreUpdate : function(data) {
+  onStoreUpdate : function(data) {
     console.log('inside onStoreUpdate.');
    if(data.registered==true && data.logged==false)
    {
@@ -37,7 +29,7 @@ var LoginBox = React.createClass({
        window.localStorage.setItem('token',data.token);
         this.loginSuccess();
    }
- 
+
  },
 
  clear : function()
@@ -72,7 +64,7 @@ loginSuccess()
 
       <div className="form">
 
-              <h1>Welcome To Tech Blog </h1>
+                <h1>Know about Mobiles </h1>
 
                 <ul className="tab-group">
                   <li className="tab active"><a href="#login">Log In </a></li>
@@ -89,17 +81,17 @@ loginSuccess()
                           <form id="loginForm" >
 
                                 <div className="field-wrap">
-                                  <label>
+                                  <label id="labels">
                                     Email Address<span className="req">*</span>
                                   </label>
-                                  <input type="email" required autocomplete="off" name="email" />
+                                  <input type="email" required autocomplete="off" name="email" id="inputBoxes"/>
                                 </div>
 
                                 <div className="field-wrap">
-                                  <label>
+                                  <label id="labels">
                                     Password<span className="req">*</span>
                                   </label>
-                                  <input type="password"required autocomplete="off" name="password" />
+                                  <input type="password"required autocomplete="off" name="password" id="inputBoxes" />
                                 </div>
 
 
@@ -118,33 +110,33 @@ loginSuccess()
 
                           <div className="top-row">
                               <div className="field-wrap">
-                                    <label>
+                                    <label id="labels">
                                           First Name<span className="req">*</span>
                                     </label>
-                                    <input type="text" name="fname" required autocomplete="off" />
+                                    <input type="text" name="fname" required autocomplete="off" id="inputBoxes" />
                               </div>
 
                               <div className="field-wrap">
-                                    <label>
+                                    <label id="labels">
                                       Last Name<span className="req">*</span>
                                     </label>
-                                    <input type="text" name="lname" required autocomplete="off" />
+                                    <input type="text" name="lname" required autocomplete="off"  id="inputBoxes"/>
                               </div>
 
                             </div>
 
                               <div className="field-wrap">
-                                    <label>
+                                    <label id="labels">
                                       Email Address<span className="req">*</span>
                                     </label>
-                                    <input type="email" name="email" required autocomplete="off" />
+                                    <input type="email" name="email" required autocomplete="off" id="inputBoxes" />
                               </div>
 
                               <div className="field-wrap">
-                                    <label>
+                                    <label id="labels">
                                       Set A Password<span className="req">*</span>
                                     </label>
-                                    <input type="password" name="password" required autocomplete="off" />
+                                    <input type="password" name="password" required autocomplete="off" id="inputBoxes" />
                               </div>
 
                             </form>

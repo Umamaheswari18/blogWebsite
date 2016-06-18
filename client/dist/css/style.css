@@ -75,7 +75,7 @@
     margin: 0 0 40px;
   }
 
-  label {
+  label#labels {
     position: absolute;
     -webkit-transform: translateY(6px);
             transform: translateY(6px);
@@ -87,26 +87,26 @@
     pointer-events: none;
     font-size: 22px;
   }
-  label .req {
+  label#labels .req {
     margin: 2px;
     color: #1ab188;
   }
 
-  label.active {
+  label#labels.active {
     -webkit-transform: translateY(50px);
             transform: translateY(50px);
     left: 2px;
     font-size: 14px;
   }
-  label.active .req {
+  label#labels.active .req {
     opacity: 0;
   }
 
-  label.highlight {
+  label#labels.highlight {
     color: #ffffff;
   }
 
-  input, textarea {
+  input#inputBoxes, textarea#inputBoxes {
     font-size: 22px;
     display: block;
     width: 100%;
@@ -120,12 +120,12 @@
     -webkit-transition: border-color .25s ease, box-shadow .25s ease;
     transition: border-color .25s ease, box-shadow .25s ease;
   }
-  input:focus, textarea:focus {
+  input#inputBoxes:focus, textarea#inputBoxes:focus {
     outline: 0;
     border-color: #1ab188;
   }
 
-  textarea {
+  textarea#inputBoxes {
     border: 2px solid #a0b3b0;
     resize: vertical;
   }
@@ -219,4 +219,62 @@
 #homeBox
 {
   margin-top: 100px;
+}
+
+
+#newBlog
+{
+  margin: 100px;
+  background-color: #e4b4e4;
+  border:2px solid rgba(117,41,117,1);
+  border-radius: 35px;
+  padding: 50px;
+  box-shadow: 10px -8px 12px -1px rgba(117,41,117,1);
+}
+
+#blogThing
+{
+  padding:20px;
+  margin-top:100px;
+  margin-left:50px;
+  margin-right:50px;
+  border:2px solid #000099;
+  border-radius: 25px;
+  background: #80e5ff;
+}
+
+hr{
+  color:#000099;
+}
+
+.descr
+{
+  font-family:arial;
+  color:#000099;
+  font-size: 16px;
+}
+
+#poster {
+  height: 400px;
+  width: 1200px;
+}
+
+#postElement{
+  margin-top: 100px;
+}
+
+li#title{
+  font-weight:bold;
+  font-size:20px;
+  color:blue;
+}
+
+li#text{
+  font-size: 18px;
+}
+
+li#author
+{
+  font-size: 16px;
+  color:blue;
 }

@@ -7,13 +7,11 @@ var Route = Router.Route;
 //var MainLayout=require('./components/MainLayout').MainLayout;
 var Home=require('./components/Home');
 
-var MovieBox=require('./components/MovieBox');
+var BlogBox=require('./components/BlogBox');
 var NewBlog=require('./components/newBlog');
 
 var LoginBox=require('./components/login');
-
-var TechBlog=require('./components/tech');
-var FunBlog=require('./components/fun');
+var FullBlog=require('./components/fullblog');
 
 // var Hello=require('./components/hello');
 
@@ -22,9 +20,8 @@ module.exports = (
       <Route path="/" handler={LoginBox} />
       <Route path="/login" handler={LoginBox} />
       <Route path="/home" handler={Home} />
-      <Route path="/blogs" handler={MovieBox} />
-      <Route path="/tech" handler={TechBlog} />
-      <Route path="/fun" handler={FunBlog} />
+      <Route path="/blogs" handler={BlogBox} />
+      <Route path='/fullPost/:Title' handler={FullBlog} />
       <Route path="/newBlog" handler={NewBlog} />
 
 

@@ -39,8 +39,8 @@ var NavigationBar=React.createClass({
                    <div className="nav-collapse collapse navbar-responsive-collapse">
                        <ul className="nav navbar-nav navbar-left">
                            <li className=""><Link to="/home">Home</Link></li>
-                           <li className=""><Link to="/blogs">View Blogs</Link></li>
-                           <li className=""><Link to="/newBlog">Write a story</Link></li>
+                           <li className=""><Link to="/blogs">View All</Link></li>
+                           <li className=""><Link to="/newBlog">Write a Blog</Link></li>
                            <li><a onClick={this.doLogout} >Logout</a></li>
                            </ul>
 

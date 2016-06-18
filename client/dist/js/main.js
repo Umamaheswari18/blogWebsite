@@ -24419,6 +24419,113 @@ var Link = require('react-router').Link;
 var NavigationBar=require('./NavigationBar');
 
 
+var BlogList = React.createClass({displayName: "BlogList",
+
+       render: function () {
+    var blogrows = [];
+
+   this.props.blogs.forEach(function(blog) {
+
+     blogrows.push(React.createElement(BlogItem, {blog: blog, key: blog.Title}));
+
+   }.bind(this));
+
+
+       return (
+      React.createElement("div", null, 
+        blogrows
+      )
+        );
+   }
+});
+
+var BlogItem = React.createClass({displayName: "BlogItem",
+
+
+  render: function() {
+    return(
+      React.createElement("div", {className: "container"}, 
+
+            React.createElement("div", {className: "row", id: "blogThing"}, 
+                React.createElement("div", {className: "col-md-8"}, 
+
+                  React.createElement("center", null, React.createElement("h2", null, 
+                  this.props.blog.Title
+                  )), 
+
+                  React.createElement("center", null, React.createElement("p", {className: "lead"}, 
+                  "Posted by  ", this.props.blog.Username, " on ", this.props.blog.writtenDate
+                  )), 
+                  React.createElement("hr", null), 
+
+                  React.createElement("p", {className: "descr"}, 
+                  this.props.blog.ShortDes
+                  ), 
+
+                  React.createElement("button", {className: "btn btn-primary"}, React.createElement(Link, {to: '/fullPost/' +this.props.blog.Title}, " Read More ", React.createElement("span", {className: "glyphicon glyphicon-chevron-right"})))
+
+              )
+          )
+        )
+
+    );
+  }
+});
+
+var BlogBox=React.createClass({displayName: "BlogBox",
+    loadBlogs:function(){
+    $.ajax({
+      type:'GET',
+      url: '/api/blogs',
+      datatype:'json',
+      success: function(data) {
+          this.setState({
+            blogInput:data
+          });
+
+        }.bind(this)
+    });
+  },
+
+  componentDidMount: function() {
+        this.loadBlogs();
+       setInterval(this.loadBlogs,1000);
+  },
+  getInitialState: function() {
+   return {
+
+      blogInput: []
+     };
+  },
+
+
+  render: function()
+  {
+
+    return(
+
+    React.createElement("div", {className: "container"}, 
+      React.createElement(NavigationBar, null), 
+
+       React.createElement(BlogList, {blogs: this.state.blogInput})
+      )
+    );
+  }
+});
+
+
+
+
+
+
+
+module.exports=BlogBox;
+},{"./NavigationBar":222,"react":200,"react-router":36}],221:[function(require,module,exports){
+var React = require('react');
+var Link = require('react-router').Link;
+var NavigationBar=require('./NavigationBar');
+
+
 var Home=React.createClass({displayName: "Home",
   render:function()
   {
@@ -24435,10 +24542,11 @@ var Home=React.createClass({displayName: "Home",
       					"Welcome ", window.localStorage.getItem('user'), " !"
       				), 
       				React.createElement("p", null, 
-                  "Feel free to posts here.."
-      				), 
-              React.createElement("p", null
+                  "You can Know about all the mobile phones here.."
 
+      				), 
+              React.createElement("p", null, 
+                "You can also write a blog about your favourite mobile here.."  
               )
       			)
       		)
@@ -24451,187 +24559,6 @@ var Home=React.createClass({displayName: "Home",
 
 
 module.exports = Home;
-},{"./NavigationBar":222,"react":200,"react-router":36}],221:[function(require,module,exports){
-var React = require('react');
-var Link = require('react-router').Link;
-var NavigationBar=require('./NavigationBar');
-
-
-
-
-var SearchBox = React.createClass({displayName: "SearchBox",
-
-  handleChange: function() {
-  this.props.onUserInput(
-    this.refs.filterTextInput.value
-  );
-},
-
-
-componentDidMount: function() {
-  $('#searchSave').on('click',function()
-  {
-  $.ajax({
-    type:'POST',
-    url: '/api/movies' ,
-    data: jQuery.param({ Title: $('#searchBox').val() }),
-    dataType: 'json',
-    cache: false,
-    success: function(data) {
-          $('#searchBox').val(" ");
-    }
-  });
-
-});
-
- },
-
-  render : function() {
-    return (
-      React.createElement("div", {className: "row", id: "searchThing"}, 
-        React.createElement("form", {role: "form"}, 
-				    React.createElement("div", {className: "form-group"}, 
-					       React.createElement("center", null, React.createElement("h2", null, "Search Movie")), 
-					      React.createElement("input", {type: "text", className: "form-control", id: "searchBox", name: "Title", value: this.props.filterText, 
-                 ref: "filterTextInput", 
-                 onChange: this.handleChange, placeholder: "Search Your Favourite movie..."})
-            )
-        ), 
-        React.createElement("center", null, React.createElement("button", {className: "btn btn-primary", id: "searchSave"}, "Search and Save")), 
-        React.createElement("br", null)
-      )
-    );
-  }
-});
-
-
-var MovieList = React.createClass({displayName: "MovieList",
-
-  handleDelete: function(Movieid){
-      return this.props.onMovieDelete(Movieid);
-    },
-     render: function () {
-    var movierows = [];
-
-   this.props.movies.forEach(function(movie) {
-
-     movierows.push(React.createElement(MovieItem, {movie: movie, key: movie.imdbID, Movieid: movie._id, onDelete: this.handleDelete}));
-   /*if(movie.Title.indexOf(this.props.filterText) === -1)
-       {
-         return;
-       } */
-
-   }.bind(this));
-
-
-       return (
-      React.createElement("div", null, 
-        movierows
-      )
-        );
-   }
-});
-
-var MovieItem = React.createClass({displayName: "MovieItem",
-
-  handleClick: function(){
-      var Movieid = this.props.Movieid;
-      return this.props.onDelete(Movieid);
-    },
-
-
-  render: function() {
-    return(
-        React.createElement("div", {className: "row", id: "movieThing"}, 
-          React.createElement("div", {className: "col-sm-4"}, 
-            React.createElement("img", {src: this.props.movie.Poster, alt: "image", className: "img-responsive", id: "imagePoster"})
-          ), 
-
-            React.createElement("div", {className: "col-sm-8"}, 
-              React.createElement("h3", {id: "movieTitle"}, "Title: ", this.props.movie.Title), 
-              React.createElement("p", null, "Actors: ", this.props.movie.Actors), 
-              React.createElement("p", null, "Director: ", this.props.movie.Director), 
-              React.createElement("p", null, "Plot: ", this.props.movie.Plot, " "), 
-              React.createElement("p", null, "Released: ", this.props.movie.Released), 
-              React.createElement("p", null, " Imdb ID: ", this.props.movie.imdbID), 
-              React.createElement("input", {type: "text", value: this.props.movie._id, id: "objectID", hidden: true, readOnly: true}), React.createElement("br", null), " ", React.createElement("br", null), " ", React.createElement("br", null), 
-              React.createElement("a", {href: 'http://www.imdb.com/title/'+this.props.movie.imdbID, className: "btn btn-primary", target: "_blank"}, "View on Imdb "), 
-              "     ", 
-              React.createElement("button", {className: "btn btn-danger", onClick: this.handleClick, id: "deleteButton"}, "Delete"), React.createElement("br", null), " ", React.createElement("br", null)
-
-            )
-
-        )
-
-    );
-  }
-});
-
-var MovieBox=React.createClass({displayName: "MovieBox",
-    loadMovie:function(){
-    $.ajax({
-      type:'GET',
-      url: '/api/movies',
-      datatype:'json',
-      success: function(data) {
-          this.setState({
-            MoviesInput:data
-          });
-
-        }.bind(this)
-    });
-  },
-
-  handleMovieDelete: function(Movieid){
-    $.ajax({
-        type: 'DELETE',
-      url: '/api/movies/' +Movieid,
-      //data: {"id" : Movieid},
-
-      dataType: 'json',
-      success: function (data) {
-        this.loadMovie();
-      }.bind(this)
-
-      });
-  },
-  componentDidMount: function() {
-        this.loadMovie();
-       setInterval(this.loadMovie,1000);
-  },
-  getInitialState: function() {
-   return {
-     filterText: '',
-      MoviesInput: []
-     };
-  },
-
-  handleUserInput: function(filterText) {
-    this.setState({
-      filterText: filterText
-     });
-  },
-  render: function()
-  {
-
-    return(
-
-    React.createElement("div", {className: "container"}, 
-      React.createElement(NavigationBar, null), 
-       React.createElement(SearchBox, {filterText: this.state.filterText, onUserInput: this.handleUserInput}), 
-       React.createElement(MovieList, {filterText: this.state.filterText, movies: this.state.MoviesInput, onMovieDelete: this.handleMovieDelete})
-      )
-    );
-  }
-});
-
-
-
-
-
-
-
-module.exports=MovieBox;
 },{"./NavigationBar":222,"react":200,"react-router":36}],222:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
@@ -24674,8 +24601,8 @@ var NavigationBar=React.createClass({displayName: "NavigationBar",
                    React.createElement("div", {className: "nav-collapse collapse navbar-responsive-collapse"}, 
                        React.createElement("ul", {className: "nav navbar-nav navbar-left"}, 
                            React.createElement("li", {className: ""}, React.createElement(Link, {to: "/home"}, "Home")), 
-                           React.createElement("li", {className: ""}, React.createElement(Link, {to: "/blogs"}, "View Blogs")), 
-                           React.createElement("li", {className: ""}, React.createElement(Link, {to: "/newBlog"}, "Write a story")), 
+                           React.createElement("li", {className: ""}, React.createElement(Link, {to: "/blogs"}, "View All")), 
+                           React.createElement("li", {className: ""}, React.createElement(Link, {to: "/newBlog"}, "Write a Blog")), 
                            React.createElement("li", null, React.createElement("a", {onClick: this.doLogout}, "Logout"))
                            )
 
@@ -24694,7 +24621,80 @@ var NavigationBar=React.createClass({displayName: "NavigationBar",
 
 
 module.exports = NavigationBar;
-},{"../Actions/actions":219,"../stores/store":227,"react":200,"react-router":36,"reflux":216}],223:[function(require,module,exports){
+},{"../Actions/actions":219,"../stores/store":228,"react":200,"react-router":36,"reflux":216}],223:[function(require,module,exports){
+var React = require('react');
+var Link = require('react-router').Link;
+var NavigationBar=require('./NavigationBar');
+
+var FullPostBox = React.createClass({displayName: "FullPostBox",
+  getInitialState: function () {
+    return {
+      postObj: {}
+    };
+  },
+
+  loadPost: function(){
+    $.ajax({
+      type: 'GET',
+      url: '/api/blog/' + this.props.params.Title,
+      cache: false,
+      success: function (result) {
+        if(result.message=='blog not found')
+        {
+          alert('Blog not found');
+        }
+        else{
+        this.setState({postObj: result});
+      }
+      }.bind(this)
+
+    })
+  },
+
+  componentDidMount: function () {
+    this.loadPost();
+      },
+
+  render: function(){
+      return(
+        React.createElement("div", {className: "container", id: "fullPostBox"}, 
+          React.createElement(NavigationBar, null), 
+          React.createElement("div", {className: "row", id: "postElement"}, 
+            React.createElement("div", null, 
+              React.createElement("center", null, " ", React.createElement("img", {id: "poster", alt: "Bootstrap Image Preview", src: this.state.postObj.Poster, className: "img-responsive"}
+               )
+               )
+            ), 
+            React.createElement("br", null), 
+            React.createElement("br", null), 
+            React.createElement("div", null, 
+              React.createElement("div", {className: "list-group", id: "list-group"}, 
+                React.createElement("div", {className: "list-group-item", id: "list-group-item"}, 
+                  React.createElement("ul", {className: "list-unstyled", id: "ulist"}, 
+                    React.createElement("li", {id: "title"}, 
+                      this.state.postObj.Title
+                    ), 
+
+                    React.createElement("li", {id: "text"}, 
+                      this.state.postObj.LongDes
+                    ), 
+
+                    React.createElement("li", {id: "author"}, 
+                      React.createElement("span", null, "Posted by :  "), " ", this.state.postObj.Username
+                    )
+                  ), 
+                  React.createElement("input", {type: "text", id: "postID", value: this.state.postObj._id, hidden: true, readOnly: true})
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+});
+
+module.exports = FullPostBox;
+},{"./NavigationBar":222,"react":200,"react-router":36}],224:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Link = require('react-router').Link;
@@ -24712,15 +24712,7 @@ var LoginBox = React.createClass({displayName: "LoginBox",
    Router.Navigation,
    Reflux.listenTo(store,'onStoreUpdate')],
 
- // getInitialState:function()
- // {
- //   return{
- //   isLoggedIn : false
- // };
- // },
-
-
- onStoreUpdate : function(data) {
+  onStoreUpdate : function(data) {
     console.log('inside onStoreUpdate.');
    if(data.registered==true && data.logged==false)
    {
@@ -24734,7 +24726,7 @@ var LoginBox = React.createClass({displayName: "LoginBox",
        window.localStorage.setItem('token',data.token);
         this.loginSuccess();
    }
- 
+
  },
 
  clear : function()
@@ -24769,7 +24761,7 @@ loginSuccess()
 
       React.createElement("div", {className: "form"}, 
 
-              React.createElement("h1", null, "Welcome To Tech Blog "), 
+                React.createElement("h1", null, "Know about Mobiles "), 
 
                 React.createElement("ul", {className: "tab-group"}, 
                   React.createElement("li", {className: "tab active"}, React.createElement("a", {href: "#login"}, "Log In ")), 
@@ -24786,17 +24778,17 @@ loginSuccess()
                           React.createElement("form", {id: "loginForm"}, 
 
                                 React.createElement("div", {className: "field-wrap"}, 
-                                  React.createElement("label", null, 
+                                  React.createElement("label", {id: "labels"}, 
                                     "Email Address", React.createElement("span", {className: "req"}, "*")
                                   ), 
-                                  React.createElement("input", {type: "email", required: true, autocomplete: "off", name: "email"})
+                                  React.createElement("input", {type: "email", required: true, autocomplete: "off", name: "email", id: "inputBoxes"})
                                 ), 
 
                                 React.createElement("div", {className: "field-wrap"}, 
-                                  React.createElement("label", null, 
+                                  React.createElement("label", {id: "labels"}, 
                                     "Password", React.createElement("span", {className: "req"}, "*")
                                   ), 
-                                  React.createElement("input", {type: "password", required: true, autocomplete: "off", name: "password"})
+                                  React.createElement("input", {type: "password", required: true, autocomplete: "off", name: "password", id: "inputBoxes"})
                                 )
 
 
@@ -24815,33 +24807,33 @@ loginSuccess()
 
                           React.createElement("div", {className: "top-row"}, 
                               React.createElement("div", {className: "field-wrap"}, 
-                                    React.createElement("label", null, 
+                                    React.createElement("label", {id: "labels"}, 
                                           "First Name", React.createElement("span", {className: "req"}, "*")
                                     ), 
-                                    React.createElement("input", {type: "text", name: "fname", required: true, autocomplete: "off"})
+                                    React.createElement("input", {type: "text", name: "fname", required: true, autocomplete: "off", id: "inputBoxes"})
                               ), 
 
                               React.createElement("div", {className: "field-wrap"}, 
-                                    React.createElement("label", null, 
+                                    React.createElement("label", {id: "labels"}, 
                                       "Last Name", React.createElement("span", {className: "req"}, "*")
                                     ), 
-                                    React.createElement("input", {type: "text", name: "lname", required: true, autocomplete: "off"})
+                                    React.createElement("input", {type: "text", name: "lname", required: true, autocomplete: "off", id: "inputBoxes"})
                               )
 
                             ), 
 
                               React.createElement("div", {className: "field-wrap"}, 
-                                    React.createElement("label", null, 
+                                    React.createElement("label", {id: "labels"}, 
                                       "Email Address", React.createElement("span", {className: "req"}, "*")
                                     ), 
-                                    React.createElement("input", {type: "email", name: "email", required: true, autocomplete: "off"})
+                                    React.createElement("input", {type: "email", name: "email", required: true, autocomplete: "off", id: "inputBoxes"})
                               ), 
 
                               React.createElement("div", {className: "field-wrap"}, 
-                                    React.createElement("label", null, 
+                                    React.createElement("label", {id: "labels"}, 
                                       "Set A Password", React.createElement("span", {className: "req"}, "*")
                                     ), 
-                                    React.createElement("input", {type: "password", name: "password", required: true, autocomplete: "off"})
+                                    React.createElement("input", {type: "password", name: "password", required: true, autocomplete: "off", id: "inputBoxes"})
                               )
 
                             ), 
@@ -24861,9 +24853,124 @@ loginSuccess()
 
 
 module.exports = LoginBox;
-},{"../Actions/actions":219,"../stores/store":227,"react":200,"react-router":36,"reflux":216}],224:[function(require,module,exports){
+},{"../Actions/actions":219,"../stores/store":228,"react":200,"react-router":36,"reflux":216}],225:[function(require,module,exports){
+var React = require('react');
+var Link = require('react-router').Link;
+var NavigationBar=require('./NavigationBar');
 
-},{}],225:[function(require,module,exports){
+
+
+
+var NewBlog=React.createClass({displayName: "NewBlog",
+
+
+
+  doInsert : function()
+  {
+    $.ajax({
+      type:'POST',
+      url:'/api/add',
+      data:$('#newBlogForm').serialize(),
+      datatype:'json',
+      error:function(err)
+      {
+        alert("Blog not added");
+      },
+      success:function(response)
+      {
+        if(response.message=='Blog Inserted')
+        {
+          alert("Blog Added");
+          $('#newBlogForm')[0].reset();
+        }
+      }
+    })
+  },
+
+  render:function()
+  {
+    return(
+      React.createElement("div", {className: "container"}, 
+
+          React.createElement(NavigationBar, null), 
+
+          React.createElement("div", {className: "container-fluid", id: "newBlog"}, 
+	               React.createElement("div", {className: "row"}, 
+		                  React.createElement("div", {className: "col-md-3"}
+		                  ), 
+
+		                  React.createElement("div", {className: "col-md-6"}, 
+			                   React.createElement("form", {role: "form", id: "newBlogForm"}, 
+                         React.createElement("div", {className: "form-group"}, 
+
+                              React.createElement("label", null, 
+                                    "Author"
+                              ), 
+
+                              React.createElement("input", {type: "text", className: "form-control", name: "userName", value: window.localStorage.getItem('user'), readOnly: true})
+                  ), 
+
+				                     React.createElement("div", {className: "form-group"}, 
+
+					                        React.createElement("label", null, 
+						                            "Title"
+					                        ), 
+
+                                  React.createElement("input", {type: "text", className: "form-control", name: "Title"})
+				              ), 
+
+
+                      React.createElement("div", {className: "form-group"}, 
+
+              					React.createElement("label", null, 
+              						"Description(in Few Words)"
+              					), 
+
+                        React.createElement("textarea", {className: "form-control", rows: "5", cols: "10", name: "shortDesc"})
+				              ), 
+
+                      React.createElement("div", {className: "form-group"}, 
+
+              					React.createElement("label", null, 
+              						"Complete Description"
+              					), 
+
+                        React.createElement("textarea", {className: "form-control", rows: "20", cols: "10", name: "fullDesc"})
+				              ), 
+
+                      React.createElement("div", {className: "form-group"}, 
+
+              					React.createElement("label", null, 
+              						"Please provide  Image"
+              					), 
+
+                        React.createElement("input", {type: "text", name: "Poster", className: "form-control"})
+
+				              )
+                  ), 
+				              React.createElement("button", {className: "btn btn-info", id: "insertButton", onClick: this.doInsert, className: "form-control"}, 
+					                 "Add this"
+				              )
+
+		        ), 
+  		React.createElement("div", {className: "col-md-3"}
+  		)
+	    )
+    )
+
+
+  )
+
+
+
+
+    );
+  }
+});
+
+
+module.exports=NewBlog;
+},{"./NavigationBar":222,"react":200,"react-router":36}],226:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var routes = require('./routes.js');
@@ -24875,7 +24982,7 @@ Router.run(routes, Router.HistoryLocation, function(Root){
   React.render(React.createElement(Root, null), document.body);
 });
 
-},{"./routes.js":226,"react":200,"react-dom":11,"react-router":36}],226:[function(require,module,exports){
+},{"./routes.js":227,"react":200,"react-dom":11,"react-router":36}],227:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -24885,12 +24992,11 @@ var Route = Router.Route;
 //var MainLayout=require('./components/MainLayout').MainLayout;
 var Home=require('./components/Home');
 
-var MovieBox=require('./components/MovieBox');
+var BlogBox=require('./components/BlogBox');
 var NewBlog=require('./components/newBlog');
 
 var LoginBox=require('./components/login');
-
-
+var FullBlog=require('./components/fullblog');
 
 // var Hello=require('./components/hello');
 
@@ -24899,13 +25005,14 @@ module.exports = (
       React.createElement(Route, {path: "/", handler: LoginBox}), 
       React.createElement(Route, {path: "/login", handler: LoginBox}), 
       React.createElement(Route, {path: "/home", handler: Home}), 
-      React.createElement(Route, {path: "/blogs", handler: MovieBox}), 
+      React.createElement(Route, {path: "/blogs", handler: BlogBox}), 
+      React.createElement(Route, {path: "/fullPost/:Title", handler: FullBlog}), 
       React.createElement(Route, {path: "/newBlog", handler: NewBlog})
 
 
     )
 );
-},{"./components/Home":220,"./components/MovieBox":221,"./components/login":223,"./components/newBlog":224,"react":200,"react-router":36}],227:[function(require,module,exports){
+},{"./components/BlogBox":220,"./components/Home":221,"./components/fullblog":223,"./components/login":224,"./components/newBlog":225,"react":200,"react-router":36}],228:[function(require,module,exports){
 var Reflux=require('reflux');
 var actions = require('../Actions/actions');
 
@@ -25004,4 +25111,4 @@ var store = Reflux.createStore({
 
 
 module.exports=store;
-},{"../Actions/actions":219,"reflux":216}]},{},[225]);
+},{"../Actions/actions":219,"reflux":216}]},{},[226]);

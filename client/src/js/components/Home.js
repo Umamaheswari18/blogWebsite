@@ -19,10 +19,11 @@ var Home=React.createClass({
       					Welcome {window.localStorage.getItem('user')} !
       				</h2>
       				<p>
-                  Feel free to posts here..
+                  You can Know about all the mobile phones here..
+
       				</p>
               <p>
-
+                You can also write a blog about your favourite mobile here..  
               </p>
       			</div>
       		</div>

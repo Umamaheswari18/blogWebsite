@@ -9,7 +9,7 @@ var passport=require('passport');
 var jsonwebtken=require('jsonwebtoken');
 var bcrypt=require('bcrypt');
 
-var movie = require('./api/routes/blog/movie');
+var movie = require('./api/routes/blog/blog');
 var user=require('./api/routes/blog/user');
 var config=require('./Config/config.json');
 var path = require('path');
